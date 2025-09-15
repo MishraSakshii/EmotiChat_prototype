@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>EmotiChat — Prototype</title>
+<style>
+:root{--bg:#0f1724;--card:#0b1220;--accent:#7dd3fc;--muted:#94a3b8;--glass:rgba(255,255,255,0.04)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,Arial;background:linear-gradient(180deg,#061021 0%, #071a2b 100%);color:#e6eef8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
+.container{width:100%;max-width:1100px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:20px;box-shadow:0 8px 30px rgba(2,6,23,0.7)}
+.header{display:flex;align-items:center;gap:12px}
+.logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#60a5fa);display:flex;align-items:center;justify-content:center;font-weight:700;color:#04293a}
+.title{font-size:20px;font-weight:700}
+.grid{display:grid;grid-template-columns:360px 1fr;gap:18px;margin-top:18px}
+.card{background:var(--card);padding:14px;border-radius:10px;box-shadow:0 6px 20px rgba(2,6,23,0.6)}
+.section-title{font-size:13px;color:var(--muted);margin-bottom:8px}
+.input,textarea,button{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;font-size:14px}
+.room{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.room .meta{font-size:13px;color:var(--muted)}
+.btn{background:linear-gradient(90deg,var(--accent),#60a5fa);border:none;color:#04293a;font-weight:700;cursor:pointer}
+.chat-box{height:380px;overflow:auto;padding:10px;border-radius:8px;background:var(--glass);border:1px solid rgba(255,255,255,0.02)}
+.msg{margin-bottom:8px;padding:8px;border-radius:8px;max-width:78%}
+.msg.me{background:linear-gradient(90deg,#073042,#064058);margin-left:auto}
+.msg.other{background:linear-gradient(90deg,#0b1b2a,#082233)}
+.footer{display:flex;gap:8px;margin-top:12px}
+.small{font-size:12px;color:var(--muted)}
+.mood-pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(125,211,252,0.12);color:var(--accent);font-weight:600;margin-right:6px}
+.stat{display:flex;gap:8px;align-items:center}
+.center{display:flex;align-items:center;justify-content:center}
+.kv{font-size:28px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="container" role="main">
+  <div class="header">
+    <div class="logo">E</div>
+    <div>
+      <div class="title">EmotiChat — Prototype</div>
+      <div class="small">AI-powered emotional bonding — demo prototype</div>
+    </div>
+  </div>
+
+  <div class="grid" aria-label="Main interface">
+    <div>
+      <div class="card">
+        <div class="section-title">Quick Mood Check-in</div>
+        <textarea id="moodInput" placeholder="Type how you're feeling right now... (e.g. anxious about exams, happy with friends)" rows="4"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="detectBtn" class="btn">Detect Emotion</button>
+          <button id="suggestBtn" class="input">Suggest Rooms</button>
+        </div>
+        <div style="margin-top:12px">
+          <div class="section-title">Detected Emotion</div>
+          <div id="detected" class="small">—</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="section-title">Suggested Bonding Rooms</div>
+        <div id="roomsList">
+          <!-- rooms appear here -->
+        </div>
+        <div style="margin-top:8px" class="small">Rooms are simulated suggestions. Join to open a local demo chat.</div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="section-title">Your Empathy Stats</div>
+        <div style="display:flex;gap:12px;margin-top:8px">
+          <div class="stat"><div class="kv" id="points">12</div><div class="small">Empathy pts</div></div>
+          <div class="stat"><div class="kv" id="moodStreak">3</div><div class="small">Check-ins</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div class="section-title">Room — <span id="roomName">Lobby</span></div>
+            <div class="small">Currently simulated local chat</div>
+          </div>
+          <div class="small">Community Mood: <span id="communityMood">Calm</span></div>
+        </div>
+        <div class="chat-box" id="chatBox" aria-live="polite">
+          <!-- messages -->
+        </div>
+        <div class="footer">
+          <input id="chatInput" class="input" placeholder="Send a supportive message..." />
+          <button id="sendBtn" class="btn">Send</button>
+        </div>
+        <div style="margin-top:10px" class="small">Try typing empathetic responses like "I'm here for you" — the prototype awards empathy points for supportive phrases.</div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="section-title">Emotional Dashboard</div>
+        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+          <div class="mood-pill" id="moodPill">Neutral</div>
+          <div class="small">Historic mood log (last 5)</div>
+        </div>
+        <div id="moodLog" style="margin-top:8px" class="small">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Simple keyword-based "emotion detection" for the prototype
+const emotionMap = [
+  {k: ['happy','joy','excited','glad','thankful'],'label':'Happy'},
+  {k: ['sad','lonely','depressed','unhappy','down'],'label':'Sad'},
+  {k: ['anxious','nervous','worried','stressed'],'label':'Anxious'},
+  {k: ['angry','frustrat','mad','annoyed'],'label':'Angry'},
+  {k: ['calm','peaceful','relaxed'],'label':'Calm'}
+];
+
+const rooms = [
+  {id:'r1',name:'Anxiety Support',desc:'Short check-ins for anxious moments.'},
+  {id:'r2',name:'Happy Shares',desc:'Celebrate small wins and joy.'},
+  {id:'r3',name:'Lonely? Let\'s Talk',desc:'Gentle space for loneliness.'},
+  {id:'r4',name:'Quiet Reflection',desc:'Voice notes and mindful prompts.'},
+];
+
+let moodHistory = [];
+let empathyPoints = 12;
+let currentRoom = 'Lobby';
+
+const detectedEl = document.getElementById('detected');
+const roomsList = document.getElementById('roomsList');
+const roomNameEl = document.getElementById('roomName');
+const chatBox = document.getElementById('chatBox');
+const chatInput = document.getElementById('chatInput');
+const pointsEl = document.getElementById('points');
+const moodPill = document.getElementById('moodPill');
+const moodLog = document.getElementById('moodLog');
+const communityMoodEl = document.getElementById('communityMood');
+
+function simpleDetect(text){
+  text = text.toLowerCase();
+  for(const e of emotionMap){
+    for(const kw of e.k){
+      if(text.includes(kw)) return e.label;
+    }
+  }
+  // fallback by punctuation or emoji
+  if(text.includes('!')) return 'Excited';
+  return 'Neutral';
+}
+
+function renderRooms(){
+  roomsList.innerHTML = '';
+  rooms.forEach(r=>{
+    const div = document.createElement('div');
+    div.className = 'room';
+    div.innerHTML = `<div><div style="font-weight:700">${r.name}</div><div class="meta">${r.desc}</div></div><div><button class="input" data-id="${r.id}">Join</button></div>`;
+    roomsList.appendChild(div);
+  });
+  roomsList.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    const id = b.dataset.id;
+    const r = rooms.find(rr=>rr.id===id);
+    currentRoom = r.name;
+    roomNameEl.textContent = currentRoom;
+    chatBox.innerHTML = '';
+    appendSystem(`You joined "${r.name}". This is a demo room (local simulation).`);
+  }));
+}
+
+function appendSystem(text){
+  const d = document.createElement('div');
+  d.className = 'msg other';
+  d.style.opacity = 0.9;
+  d.textContent = text;
+  chatBox.appendChild(d);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function appendMessage(text, me=false){
+  const d = document.createElement('div');
+  d.className = 'msg ' + (me?'me':'other');
+  d.textContent = text;
+  chatBox.appendChild(d);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+document.getElementById('detectBtn').addEventListener('click', ()=>{
+  const txt = document.getElementById('moodInput').value||'';
+  const emo = simpleDetect(txt);
+  detectedEl.textContent = emo;
+  moodPill.textContent = emo;
+  moodHistory.unshift(emo);
+  if(moodHistory.length>5) moodHistory.pop();
+  moodLog.textContent = moodHistory.join(' • ');
+  // community mood simple heuristic
+  communityMoodEl.textContent = moodHistory[0] || 'Calm';
+});
+
+document.getElementById('suggestBtn').addEventListener('click', ()=>{
+  renderRooms();
+  appendSystem('Suggested rooms refreshed based on your input.');
+});
+
+document.getElementById('sendBtn').addEventListener('click', ()=>{
+  const txt = chatInput.value.trim();
+  if(!txt) return;
+  appendMessage(txt,true);
+  chatInput.value = '';
+  // simple empathy award: if message contains supportive phrases, give points
+  const supportPhrases = ['i\'m here','i am here','that sounds','you are not alone','i understand','send love','take care','that must be','i hear you','thank you for sharing'];
+  const low = txt.toLowerCase();
+  let awarded = 0;
+  supportPhrases.forEach(p=>{ if(low.includes(p)) awarded+=2; });
+  if(awarded>0){
+    empathyPoints += awarded;
+    pointsEl.textContent = empathyPoints;
+    appendSystem(`+${awarded} empathy pts awarded for supportive response.`);
+  } else {
+    // simulated bot reply encouraging empathy
+    setTimeout(()=>{
+      appendMessage('Thanks for sharing — would you like to try saying "I\'m here for you" to support them?');
+    },800);
+  }
+});
+
+// quick simulation: add a few starter messages
+appendSystem('Welcome to the EmotiChat demo. Try a mood check-in on the left.');
+appendMessage("Hey, I've been feeling so anxious about interviews lately...","other");
+appendMessage("I'm here for you — what's worrying you most?","other");
+
+renderRooms();
+</script>
+</body>
+</html>
