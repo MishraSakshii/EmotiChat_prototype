@@ -7,7 +7,7 @@ It enables people to connect meaningfully through **mood check-ins, supportive c
 ---
 
 ## Overview
-Many people feel lonely despite having social apps. EmotiChat focuses on *bonding through emotions* by:
+Many people feel lonely despite having social apps. EmotiChat focuses on *bonding through emotions* by: 
 - Understanding how users feel (mood detection).
 - Suggesting safe, themed bonding rooms.
 - Rewarding supportive conversations with empathy points.
