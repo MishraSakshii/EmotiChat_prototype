@@ -44,6 +44,6 @@ Many people feel lonely despite having social apps. EmotiChat focuses on *bondin
 ---
 
 ## Team
-- *Team Name:* <INVICTA>  
+- *Team Name:* INVICTA  
 
 ---
